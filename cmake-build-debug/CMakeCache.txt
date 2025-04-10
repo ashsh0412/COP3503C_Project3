@@ -137,7 +137,7 @@ CMAKE_OSX_DEPLOYMENT_TARGET:STRING=
 
 //The product will be built against the headers and libraries located
 // inside the indicated SDK.
-CMAKE_OSX_SYSROOT:PATH=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk
+CMAKE_OSX_SYSROOT:PATH=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.4.sdk
 
 //Value Computed by CMake
 CMAKE_PROJECT_DESCRIPTION:STATIC=
@@ -212,15 +212,6 @@ CMAKE_TAPI:FILEPATH=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeD
 // during the make.  This is useful for debugging only. With Visual
 // Studio IDE projects all commands are done without /nologo.
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
-
-//Value Computed by CMake
-MinesweeperMilestone1_BINARY_DIR:STATIC=/Users/sungho/Documents/Project3_COP3503C/cmake-build-debug
-
-//Value Computed by CMake
-MinesweeperMilestone1_IS_TOP_LEVEL:STATIC=ON
-
-//Value Computed by CMake
-MinesweeperMilestone1_SOURCE_DIR:STATIC=/Users/sungho/Documents/Project3_COP3503C
 
 //Value Computed by CMake
 Project3_COP3503C_BINARY_DIR:STATIC=/Users/sungho/Documents/Project3_COP3503C/cmake-build-debug

@@ -1,5 +1,7 @@
-#include <iostream>
-#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/CircleShape.hpp>
+
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(200, 200), "SFML Works!");
