@@ -6,7 +6,23 @@ project(Project3_COP3503C)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(SOURCE_FILES main.cpp)
+set(SOURCE_FILES main.cpp
+        Tile.cpp
+        Tile.h
+        WelcomeWindow.cpp
+        WelcomeWindow.h
+        GameWindow.cpp
+        GameWindow.h
+        Config.cpp
+        Config.h
+        Board.cpp
+        Board.h
+        LeaderboardWindow.cpp
+        LeaderboardWindow.h
+        TextureManager.cpp
+        TextureManager.h
+        TimerPause.cpp
+        TimerPause.h)
 
 add_executable(Project3_COP3503C ${SOURCE_FILES})
 
