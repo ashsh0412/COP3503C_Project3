@@ -11,7 +11,7 @@ private:
 
     const sf::Texture* flagTexture = nullptr;
     const sf::Texture* mineTexture = nullptr;
-    const sf::Texture* revealedTexture = nullptr; // ✅ 추가
+    const sf::Texture* revealedTexture = nullptr;
     std::array<const sf::Texture*, 9> numberTextures{};
 
     bool isMine = false;
@@ -25,7 +25,7 @@ public:
     void setTexture(sf::Texture& texture);
     void setFlagTexture(sf::Texture& texture);
     void setMineTexture(sf::Texture& texture);
-    void setRevealedTexture(sf::Texture& texture); // ✅ 추가
+    void setRevealedTexture(sf::Texture& texture);
     void setNumberTexture(int num, sf::Texture& texture);
 
     void setPosition(float x, float y);
