@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <string>
+#include "Config.h"
 
 class WelcomeWindow {
 private:
@@ -11,10 +12,13 @@ private:
     std::string name;
     bool finished = false;
 
+    int windowWidth;
+    int windowHeight;
+
     void updateInputDisplay();
 
 public:
-    WelcomeWindow();
+    WelcomeWindow(const Config& config);
     void run();
     bool isFinished() const;
     std::string getName() const;

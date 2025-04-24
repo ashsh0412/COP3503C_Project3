@@ -16,7 +16,7 @@ private:
     void revealAllMines();
     void flagAllMines();
     bool inBounds(int row, int col) const;
-    bool checkVictory() const; // ✅ 이거까지 포함!
+    bool checkVictory() const;
 
 public:
     Board(int rows, int cols, int mines);
@@ -28,6 +28,6 @@ public:
     bool isGameOver() const;
     bool isVictory() const;
     int getFlagCount() const;
-    void draw(sf::RenderWindow& window, bool revealAll = false) const; // ✅ 이 줄 추가
+    void draw(sf::RenderWindow& window, bool revealPaused = false, bool revealMines = false) const;
     void reset();
 };

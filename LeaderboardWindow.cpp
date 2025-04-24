@@ -2,78 +2,98 @@
 #include <fstream>
 #include <sstream>
 #include <algorithm>
+using namespace std;
 
-LeaderboardWindow::LeaderboardWindow(const std::string& playerName, const std::string& playerTime)
-    : newName(playerName), newTime(playerTime) {
+LeaderboardWindow::LeaderboardWindow(const Config& config, const string& playerName, const string& playerTime) : newName(playerName), newTime(playerTime), windowWidth(config.getCols() * 16), windowHeight(config.getRows() * 16 + 50) {
     font.loadFromFile("files/font.ttf");
 
+    // Title setting
     titleText.setFont(font);
     titleText.setString("LEADERBOARD");
     titleText.setCharacterSize(20);
     titleText.setStyle(sf::Text::Bold | sf::Text::Underlined);
     titleText.setFillColor(sf::Color::White);
 
+    // List setting
     listText.setFont(font);
     listText.setCharacterSize(18);
     listText.setFillColor(sf::Color::White);
 
     loadFile();
 
+    // add new player
     if (!playerName.empty() && !playerTime.empty()) {
         entries.emplace_back(playerTime, playerName);
-        std::sort(entries.begin(), entries.end()); // time 오름차순 정렬
+        sort(entries.begin(), entries.end());
         if (entries.size() > 5) entries.pop_back();
-
-        // * 표시용용은 entries에만 반영
         isNewEntry = true;
-        saveFile(); // 저장할 때는 * 없이 저장
+        saveFile();
     }
 
-    // 텍스트 형식 구성
-    std::ostringstream oss;
-    int rank = 1;
-    for (const auto& [time, name] : entries) {
-        oss << rank << ".\t" << time << ", " << name;
-        if (isNewEntry && time == newTime && name == newName)
-            oss << "*";
-        oss << "\n\n";
-        ++rank;
+    string leaderboardText = "";
+    int currentRank = 1;
+
+    for (const auto& [playerTime, playerName] : entries) {
+        leaderboardText += to_string(currentRank) + ".    " + playerTime + "      " + playerName;
+
+        if (isNewEntry && playerTime == newTime && playerName == newName) {
+            leaderboardText += "*";
+        }
+
+        leaderboardText += "\n\n";
+        currentRank++;
     }
 
-    listText.setString(oss.str());
+    listText.setString(leaderboardText);
 
-    // 중앙 정렬
-    sf::FloatRect rect = titleText.getLocalBounds();
-    titleText.setOrigin(rect.left + rect.width / 2.0f, rect.top + rect.height / 2.0f);
-    titleText.setPosition(400, 100);
+    // set texts middle
+    float centerX = windowWidth / 2.0f;
+    float centerY = windowHeight / 2.0f;
 
-    rect = listText.getLocalBounds();
-    listText.setOrigin(rect.left + rect.width / 2.0f, rect.top);
-    listText.setPosition(400, 160);
+    // 5.4 additional notes, 7.4 formatting and output
+    sf::FloatRect titleBounds = titleText.getLocalBounds();
+    titleText.setOrigin(titleBounds.left + titleBounds.width / 2.0f, titleBounds.top + titleBounds.height / 2.0f);
+    titleText.setPosition(centerX, centerY - 120);
+
+    sf::FloatRect listBounds = listText.getLocalBounds();
+    listText.setOrigin(listBounds.left + listBounds.width / 2.0f, listBounds.top + listBounds.height / 2.0f);
+    listText.setPosition(centerX, centerY + 20);
 }
 
 void LeaderboardWindow::loadFile() {
-    std::ifstream file("files/leaderboard.txt");
-    std::string line;
-    while (std::getline(file, line)) {
-        std::stringstream ss(line);
-        std::string time, name;
-        if (std::getline(ss, time, ',') && std::getline(ss, name)) {
+    ifstream file("files/leaderboard.txt");
+
+    string line;
+    while (getline(file, line)) {
+        stringstream ss(line);
+
+        string time;
+        string name;
+
+        getline(ss, time, ',');
+        getline(ss, name);
+
+        if (!time.empty() && !name.empty()) {
             entries.emplace_back(time, name);
         }
     }
 }
 
 void LeaderboardWindow::saveFile() {
-    std::ofstream file("files/leaderboard.txt");
-    for (int i = 0; i < std::min(5, static_cast<int>(entries.size())); ++i) {
-        file << entries[i].first << "," << entries[i].second << "\n";
+    ofstream file("files/leaderboard.txt");
+
+    int count = min(5, static_cast<int>(entries.size()));
+
+    for (int i = 0; i < count; i++) {
+        string time = entries[i].first;
+        string name = entries[i].second;
+
+        file << time << "," << name << "\n";
     }
 }
 
 void LeaderboardWindow::run() {
-    sf::RenderWindow window(sf::VideoMode(800, 612), "Leaderboard", sf::Style::Close);
-    window.setFramerateLimit(60);
+    sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "Minesweeper", sf::Style::Close);
 
     while (window.isOpen()) {
         sf::Event event;

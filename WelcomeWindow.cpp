@@ -1,8 +1,8 @@
 #include "WelcomeWindow.h"
 #include <cctype>
-#include <algorithm>
+using namespace std;
 
-WelcomeWindow::WelcomeWindow() {
+WelcomeWindow::WelcomeWindow(const Config& config) : windowWidth(config.getCols() * 32), windowHeight(config.getRows() * 32 + 100) {
     font.loadFromFile("files/font.ttf");
 
     titleText.setFont(font);
@@ -22,29 +22,30 @@ WelcomeWindow::WelcomeWindow() {
 }
 
 void WelcomeWindow::updateInputDisplay() {
-    if (!name.empty()) {
-        std::string formatted = name;
-        formatted[0] = std::toupper(formatted[0]);
-        std::transform(formatted.begin() + 1, formatted.end(), formatted.begin() + 1, ::tolower);
-        inputText.setString(formatted + "|");
-    } else {
-        inputText.setString("|");
-    }
+    string displayName = getName();
+
+    inputText.setString(displayName + "|");
+
+    // 5.4 additional notes
+    sf::FloatRect bounds = inputText.getLocalBounds();
+    inputText.setOrigin(bounds.left + bounds.width / 2.0f, bounds.top + bounds.height / 2.0f);
 }
 
 void WelcomeWindow::run() {
-    sf::RenderWindow window(sf::VideoMode(800, 612), "Welcome", sf::Style::Close);
-    window.setFramerateLimit(60);
+    sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "Welcome", sf::Style::Close);
 
-    titleText.setPosition(400, 150);
-    promptText.setPosition(400, 220);
-    inputText.setPosition(400, 250);
+    titleText.setPosition(windowWidth / 2.0f, windowHeight / 2.0f - 150);
+    promptText.setPosition(windowWidth / 2.0f, windowHeight / 2.0f - 75);
+    inputText.setPosition(windowWidth / 2.0f, windowHeight / 2.0f - 45);
 
-    // center-align text
-    for (sf::Text* t : { &titleText, &promptText, &inputText }) {
-        sf::FloatRect rect = t->getLocalBounds();
-        t->setOrigin(rect.left + rect.width / 2.0f, rect.top + rect.height / 2.0f);
-    }
+    sf::FloatRect titleBounds = titleText.getLocalBounds();
+    titleText.setOrigin(titleBounds.left + titleBounds.width / 2.0f, titleBounds.top + titleBounds.height / 2.0f);
+
+    sf::FloatRect promptBounds = promptText.getLocalBounds();
+    promptText.setOrigin(promptBounds.left + promptBounds.width / 2.0f, promptBounds.top + promptBounds.height / 2.0f);
+
+    sf::FloatRect inputBounds = inputText.getLocalBounds();
+    inputText.setOrigin(inputBounds.left + inputBounds.width / 2.0f, inputBounds.top + inputBounds.height / 2.0f);
 
     updateInputDisplay();
 
@@ -67,7 +68,8 @@ void WelcomeWindow::run() {
                         finished = true;
                         window.close();
                     }
-                } else if (std::isalpha(static_cast<char>(event.text.unicode)) && name.length() < 10) {
+
+                } else if (isalpha(static_cast<char>(event.text.unicode)) && name.length() < 10) {
                     name += static_cast<char>(event.text.unicode);
                     updateInputDisplay();
                 }
@@ -86,11 +88,11 @@ bool WelcomeWindow::isFinished() const {
     return finished;
 }
 
-std::string WelcomeWindow::getName() const {
-    std::string formatted = name;
+string WelcomeWindow::getName() const {
+    string formatted = name;
     if (!formatted.empty()) {
-        formatted[0] = std::toupper(formatted[0]);
-        std::transform(formatted.begin() + 1, formatted.end(), formatted.begin() + 1, ::tolower);
+        formatted[0] = toupper(formatted[0]);
+        transform(formatted.begin() + 1, formatted.end(), formatted.begin() + 1, ::tolower);
     }
     return formatted;
 }

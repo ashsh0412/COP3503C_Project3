@@ -1,37 +1,46 @@
 #include "TimerPause.h"
+using namespace std;
+
+// https://cplusplus.com/reference/ctime/
+
+TimerPause::TimerPause() {
+    elapsedSeconds = 0;
+    paused = false;
+    startTime = 0;
+}
 
 void TimerPause::start() {
+    elapsedSeconds = 0;
     paused = false;
-    elapsedWhenPaused = 0;
-    startTime = std::chrono::steady_clock::now();
+    startTime = time(nullptr);
 }
 
 void TimerPause::pause() {
     if (!paused) {
         paused = true;
-        pausedTime = std::chrono::steady_clock::now();
-        elapsedWhenPaused += std::chrono::duration_cast<std::chrono::seconds>(pausedTime - startTime).count();
+        time_t now = time(nullptr);
+        elapsedSeconds += (int)(now - startTime);
     }
 }
 
 void TimerPause::resume() {
     if (paused) {
         paused = false;
-        startTime = std::chrono::steady_clock::now();
+        startTime = time(nullptr);
     }
 }
 
 void TimerPause::reset() {
-    startTime = std::chrono::steady_clock::now();
-    elapsedWhenPaused = 0;
     paused = false;
+    elapsedSeconds = 0;
+    startTime = time(nullptr);
 }
 
-int TimerPause::getElapsedSeconds() const {
+int TimerPause::getElapsedSeconds() {
     if (paused) {
-        return elapsedWhenPaused;
+        return elapsedSeconds;
     } else {
-        auto now = std::chrono::steady_clock::now();
-        return elapsedWhenPaused + std::chrono::duration_cast<std::chrono::seconds>(now - startTime).count();
+        time_t now = time(nullptr);
+        return elapsedSeconds + (int)(now - startTime);
     }
 }

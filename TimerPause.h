@@ -1,18 +1,17 @@
 #pragma once
-#include <SFML/Graphics.hpp>
-#include <chrono>
+#include <ctime>
 
 class TimerPause {
 private:
-    std::chrono::steady_clock::time_point startTime;
-    std::chrono::steady_clock::time_point pausedTime;
-    bool paused = false;
-    int elapsedWhenPaused = 0;
+    std::time_t startTime;
+    int elapsedSeconds;
+    bool paused;
 
 public:
+    TimerPause();
     void start();
     void pause();
     void resume();
     void reset();
-    int getElapsedSeconds() const;
+    int getElapsedSeconds();
 };

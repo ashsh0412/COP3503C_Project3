@@ -3,14 +3,12 @@
 #include "GameWindow.h"
 
 int main() {
-    WelcomeWindow welcome;
+    Config config("files/config.cfg");
+    WelcomeWindow welcome(config);
     welcome.run();
 
     if (welcome.isFinished()) {
-        Config config("files/config.cfg");
-        GameWindow game(config, welcome.getName());  // ✅ 이름도 전달
+        GameWindow game(config, welcome.getName());
         game.run();
     }
-
-    return 0;
 }
